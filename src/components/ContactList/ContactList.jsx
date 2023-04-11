@@ -1,22 +1,28 @@
 import style from './contactList.module.scss';
 
 import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 
-import { delContact } from 'redux/contactsSlice';
+import { fetchContacts, deleteContact } from 'redux/operations';
+import { getContacts, getFilter } from 'redux/selectors';
 
 const ContactList = () => {
 
   const dispatch = useDispatch();
-  const filter = useSelector(state => state.filter);
-  const contacts = useSelector(state => state.contacts);
+  const filter = useSelector(getFilter);
+  const { items } = useSelector(getContacts);
 
-  const deleteContact = evt => {
-    const id = evt.currentTarget.id;
-    dispatch(delContact(id));
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const delContact = evt => {
+    const id = evt.target.id;
+    dispatch(deleteContact(id));
   };
 
   const handleFilter = () => {
-    return contacts.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()))
+    return items.filter(contact => contact.name.toLowerCase().includes(filter.toLowerCase()))
   }
 
   return (
@@ -25,12 +31,12 @@ const ContactList = () => {
         return (
           <li key={contact.id} className={style.item}>
             <p className={style.contactName}>{contact.name}: </p>
-            <p className={style.contactNumber}>{contact.number}</p>
+            <p className={style.contactNumber}>{contact.phone}</p>
             <button
               className={style.button}
               id={contact.id}
               type="button"
-              onClick={evt => deleteContact(evt)}
+              onClick={evt => delContact(evt)}
             >
               Delete
             </button>

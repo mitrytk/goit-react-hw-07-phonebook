@@ -3,11 +3,12 @@ import { addContact } from 'redux/operations';
 import { getContacts } from 'redux/selectors';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { RotatingLines } from 'react-loader-spinner';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const { items } = useSelector(getContacts);
+  const { items, isLoading } = useSelector(getContacts);
 
   const dispatch = useDispatch();
 
@@ -80,8 +81,19 @@ const ContactForm = () => {
           onChange={evt => handleChange(evt)}
         />
       </label>
-      <button className={style.submit} type="submit">
-        Add contact
+      <button className={style.submit} type="submit" disabled={isLoading === 'addContact'}>
+        <div className={style.textButton}>
+          Add contact
+          <div className={style.buttonLoader}>
+            <RotatingLines
+              strokeColor="grey"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="13"
+              visible={isLoading === 'addContact'}
+            />
+          </div>
+        </div>
       </button>
     </form>
   );

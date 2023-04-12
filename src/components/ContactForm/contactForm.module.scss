@@ -35,3 +35,15 @@
         background-color: rgb(135, 210, 135);
     }
 }
+
+.textButton {
+    display: inline-block;
+    position: relative;
+}
+
+.buttonLoader {
+    position: absolute;
+    right: -18px;
+    top: 1px;
+    margin-left: 10px;
+}
